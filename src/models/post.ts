@@ -15,8 +15,8 @@ const PostSchema = new mongoose.Schema({
     },
     imageLink: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 });
 
 export const Post = mongoose.model('Post', PostSchema);

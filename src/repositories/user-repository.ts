@@ -19,8 +19,11 @@ export const createUserRepository = ({
         password,
     });
 
-export const updateUserRepository = async (userId: string, userData: Partial<UserInterface>): Promise<mongoose.Document | null> => {
-    const updatedUser = await User.findOneAndUpdate (
+export const updateUserRepository = async (
+    userId: string,
+    userData: Partial<UserInterface>
+): Promise<mongoose.Document | null> => {
+    const updatedUser = await User.findOneAndUpdate(
         { _id: userId },
         { ...userData },
         { rawResults: true }
@@ -29,7 +32,5 @@ export const updateUserRepository = async (userId: string, userData: Partial<Use
     return updatedUser;
 };
 
-export const deleteUserRepository = (userId: string) => User.findOneAndDelete(
-    { _id: userId },
-    { rawResult: true }
-);
+export const deleteUserRepository = (userId: string) =>
+    User.findOneAndDelete({ _id: userId }, { rawResult: true });

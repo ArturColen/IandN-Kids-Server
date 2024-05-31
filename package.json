@@ -1,25 +1,27 @@
 {
-  "name": "iandn-kids-server",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch ./src/server.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/mongoose": "^5.11.97",
-    "@types/node": "^20.12.12",
-    "tsx": "^4.10.5",
-    "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "@fastify/cors": "^9.0.1",
-    "dotenv": "^16.4.5",
-    "fastify": "^4.27.0",
-    "mongoose": "^8.4.0"
-  }
+    "name": "iandn-kids-server",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "tsx watch ./src/server.ts",
+        "format": "prettier --write ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/dotenv": "^8.2.0",
+        "@types/mongoose": "^5.11.97",
+        "@types/node": "^20.12.12",
+        "prettier": "^3.2.5",
+        "tsx": "^4.10.5",
+        "typescript": "^5.4.5"
+    },
+    "dependencies": {
+        "@fastify/cors": "^9.0.1",
+        "dotenv": "^16.4.5",
+        "fastify": "^4.27.0",
+        "mongoose": "^8.4.0"
+    }
 }

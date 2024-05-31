@@ -12,7 +12,7 @@ const TaskSchema = new mongoose.Schema({
     time: {
         type: String,
         required: true,
-    }
+    },
 });
 
 export const Task = mongoose.model('Task', TaskSchema);
