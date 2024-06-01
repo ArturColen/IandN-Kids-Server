@@ -18,3 +18,19 @@ export const createPostRepository = ({
         content,
         imageLink,
     });
+
+export const updatePostRepository = async (
+    postId: string,
+    postData: Partial<PostInterface>
+): Promise<mongoose.Document | null> => {
+    const updatedPost = await Post.findOneAndUpdate(
+        { _id: postId },
+        { ...postData },
+        { rawResults: true }
+    );
+
+    return updatedPost;
+};
+
+export const deletePostRepository = (postId: string) =>
+    Post.findOneAndDelete({ _id: postId }, { rawResults: true });
