@@ -18,13 +18,13 @@ export const findAllUsersService = async () => {
     }
 };
 
-export const findUserByIdService = async (idUser: string) => {
+export const findUserByIdService = async (userId: string) => {
     try {
-        if (!idUser) {
+        if (!userId) {
             throw new Error('ID do usuário não informado.');
         }
 
-        const user = await findUserByIdRepository(idUser);
+        const user = await findUserByIdRepository(userId);
 
         if (!user) {
             throw new Error('Usuário não encontrado.');
@@ -51,13 +51,13 @@ export const createUserService = async (userData: UserInterface) => {
 };
 
 export const updateUserService = async (
-    idUser: string,
+    userId: string,
     userData: Partial<UserInterface>
 ) => {
     try {
         validateUserData(userData);
 
-        const updatedUser = await updateUserRepository(idUser, userData);
+        const updatedUser = await updateUserRepository(userId, userData);
 
         if (!updatedUser) {
             throw new Error('Usuário não encontrado.');
@@ -70,9 +70,9 @@ export const updateUserService = async (
     }
 };
 
-export const deleteUserService = async (idUser: string) => {
+export const deleteUserService = async (userId: string) => {
     try {
-        const deletedUser = await deleteUserRepository(idUser);
+        const deletedUser = await deleteUserRepository(userId);
 
         if (!deletedUser) {
             throw new Error('Usuário não encontrado.');

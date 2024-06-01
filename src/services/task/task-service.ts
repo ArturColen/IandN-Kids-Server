@@ -18,13 +18,13 @@ export const findAllTasksService = async () => {
     }
 };
 
-export const findTaskByIdService = async (idTask: string) => {
+export const findTaskByIdService = async (taskId: string) => {
     try {
-        if (!idTask) {
+        if (!taskId) {
             throw new Error('ID da tarefa não informado.');
         }
 
-        const task = await findTaskByIdRepository(idTask);
+        const task = await findTaskByIdRepository(taskId);
 
         if (!task) {
             throw new Error('Tarefa não encontrada.');
@@ -51,13 +51,13 @@ export const createTaskService = async (taskData: TaskInterface) => {
 };
 
 export const updateTaskService = async (
-    idTask: string,
+    taskId: string,
     taskData: Partial<TaskInterface>
 ) => {
     try {
         validateTaskData(taskData);
 
-        const updatedTask = await updateTaskRepository(idTask, taskData);
+        const updatedTask = await updateTaskRepository(taskId, taskData);
 
         if (!updatedTask) {
             throw new Error('Tarefa não encontrada.');
@@ -70,9 +70,9 @@ export const updateTaskService = async (
     }
 };
 
-export const deleteTaskService = async (idTask: string) => {
+export const deleteTaskService = async (taskId: string) => {
     try {
-        const deletedTask = await deleteTaskRepository(idTask);
+        const deletedTask = await deleteTaskRepository(taskId);
 
         if (!deletedTask) {
             throw new Error('Tarefa não encontrada.');

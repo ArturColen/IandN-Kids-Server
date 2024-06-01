@@ -18,13 +18,13 @@ export const findAllPostsService = async () => {
     }
 };
 
-export const findPostByIdService = async (idPost: string) => {
+export const findPostByIdService = async (postId: string) => {
     try {
-        if (!idPost) {
+        if (!postId) {
             throw new Error('ID da postagem não informado.');
         }
 
-        const post = await findPostByIdRepository(idPost);
+        const post = await findPostByIdRepository(postId);
 
         if (!post) {
             throw new Error('Postagem não encontrada.');
@@ -51,13 +51,13 @@ export const createPostService = async (postData: PostInterface) => {
 };
 
 export const updatePostService = async (
-    idPost: string,
+    postId: string,
     postData: Partial<PostInterface>
 ) => {
     try {
         validatePostData(postData);
 
-        const updatedPost = await updatePostRepository(idPost, postData);
+        const updatedPost = await updatePostRepository(postId, postData);
 
         if (!updatedPost) {
             throw new Error('Postagem não encontrada.');
@@ -70,9 +70,9 @@ export const updatePostService = async (
     }
 };
 
-export const deletePostService = async (idPost: string) => {
+export const deletePostService = async (postId: string) => {
     try {
-        const deletedPost = await deletePostRepository(idPost);
+        const deletedPost = await deletePostRepository(postId);
 
         if (!deletedPost) {
             throw new Error('Postagem não encontrada.');

@@ -18,13 +18,13 @@ export const findAllContactsService = async () => {
     }
 };
 
-export const findContactByIdService = async (idContact: string) => {
+export const findContactByIdService = async (contactId: string) => {
     try {
-        if (!idContact) {
+        if (!contactId) {
             throw new Error('ID do contato não informado.');
         }
 
-        const contact = await findContactByIdRepository(idContact);
+        const contact = await findContactByIdRepository(contactId);
 
         if (!contact) {
             throw new Error('Contato não encontrado.');
@@ -51,14 +51,14 @@ export const createContactService = async (contactData: ContactInterface) => {
 };
 
 export const updateContactService = async (
-    idContact: string,
+    contactId: string,
     contactData: Partial<ContactInterface>
 ) => {
     try {
         validateContactData(contactData);
 
         const updatedContact = await updateContactRepository(
-            idContact,
+            contactId,
             contactData
         );
 
@@ -73,9 +73,9 @@ export const updateContactService = async (
     }
 };
 
-export const deleteContactService = async (idContact: string) => {
+export const deleteContactService = async (contactId: string) => {
     try {
-        const deletedContact = await deleteContactRepository(idContact);
+        const deletedContact = await deleteContactRepository(contactId);
 
         if (!deletedContact) {
             throw new Error('Contato não encontrado.');
