@@ -1,27 +1,25 @@
-import { TaskInterface } from '../../interfaces/task-interface';
+import { z } from 'zod';
 
-export const validateTaskData = (taskData: TaskInterface) => {
-    if (!taskData.title) {
-        throw new Error('Favor preencher corretamente o título da tarefa.');
-    } else if (typeof taskData.title !== 'string') {
-        throw new Error('O título da tarefa deve ser uma string válida.');
-    } else if (taskData.title.trim().length < 5) {
-        throw new Error('O título da tarefa deve ter pelo menos 5 caracteres.');
-    }
+export const taskSchema = z.object({
+    title: z
+        .string()
+        .min(5, 'O título da tarefa deve ter pelo menos 5 caracteres.'),
+    weekDay: z
+        .string()
+        .min(6, 'O dia da semana deve ter pelo menos 6 caracteres.'),
+    time: z
+        .string()
+        .regex(/^\d{2}:\d{2}$/, 'O horário deve estar no formato xx:xx.'),
+});
 
-    if (!taskData.weekDay) {
-        throw new Error('Favor preencher corretamente o dia da semana.');
-    } else if (typeof taskData.weekDay !== 'string') {
-        throw new Error('O dia da semana deve ser uma string válida.');
-    } else if (taskData.weekDay.trim().length < 6) {
-        throw new Error('O dia da semana deve ter pelo menos 6 caracteres.');
-    }
+export const validateTaskData = (taskData: any) => {
+    const result = taskSchema.safeParse(taskData);
 
-    if (!taskData.time) {
-        throw new Error('Favor preencher corretamente o horário.');
-    } else if (taskData.time !== 'string') {
-        throw new Error('O horário deve ser uma string válida.');
-    } else if (!/^\d{2}:\d{2}$/.test(taskData.time)) {
-        throw new Error('O horário deve estar no formato xx:xx.');
+    if (!result.success) {
+        const errors = result.error.errors
+            .map((error) => error.message)
+            .join(', ');
+
+        throw new Error(errors);
     }
 };

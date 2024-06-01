@@ -1,35 +1,25 @@
-import { ContactInterface } from '../../interfaces/contact-interface';
+import { z } from 'zod';
 
-export const validateContactData = (contactData: ContactInterface) => {
-    if (!contactData.username) {
-        throw new Error('Favor preencher corretamente o nome do usuário.');
-    } else if (typeof contactData.username !== 'string') {
-        throw new Error('O nome do usuário deve ser uma string válida.');
-    } else if (contactData.username.trim().length < 10) {
-        throw new Error('O nome do usuário deve ter pelo menos 10 caracteres.');
-    }
+export const contactSchema = z.object({
+    username: z
+        .string()
+        .min(10, 'O nome do usuário deve ter pelo menos 10 caracteres.'),
+    email: z
+        .string()
+        .email('O endereço de e-mail deve estar em um formato válido.'),
+    message: z
+        .string()
+        .min(50, 'A mensagem do usuário deve ter pelo menos 50 caracteres.'),
+});
 
-    if (!contactData.email) {
-        throw new Error(
-            'Favor preencher corretamente o endereço de e-mail do usuário.'
-        );
-    } else if (typeof contactData.email !== 'string') {
-        throw new Error(
-            'O endereço de e-mail do usuário deve ser uma string válida.'
-        );
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactData.email)) {
-        throw new Error(
-            'O endereço de e-mail deve estar em um formato válido.'
-        );
-    }
+export const validateContactData = (contactData: any) => {
+    const result = contactSchema.safeParse(contactData);
 
-    if (!contactData.message) {
-        throw new Error('Favor preencher corretamente a mensagem do usuário.');
-    } else if (contactData.message !== 'string') {
-        throw new Error('A mensagem do usuário deve ser uma string válida.');
-    } else if (contactData.message.trim().length < 50) {
-        throw new Error(
-            'A mensagem do usuário deve ter pelo menos 50 caracteres.'
-        );
+    if (!result.success) {
+        const errors = result.error.errors
+            .map((error) => error.message)
+            .join(', ');
+
+        throw new Error(errors);
     }
 };
