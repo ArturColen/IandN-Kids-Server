@@ -66,7 +66,7 @@ export const updateUserService = async (
         return updatedUser;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao atualizar o usuário.');
+        throw new Error('Erro ao atualizar os dados do usuário.');
     }
 };
 

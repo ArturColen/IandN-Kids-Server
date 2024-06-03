@@ -66,7 +66,7 @@ export const updateTaskService = async (
         return updatedTask;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao atualizar a tarefa.');
+        throw new Error('Erro ao atualizar dados da tarefa.');
     }
 };
 

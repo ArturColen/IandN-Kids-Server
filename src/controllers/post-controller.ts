@@ -7,7 +7,6 @@ import {
     findPostByIdService,
     updatePostService,
 } from '../services/post/post-service';
-import { validatePostData } from '../services/post/postValidations-service';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllPostsController = async (req: Request, res: Response) => {
@@ -36,15 +35,13 @@ export const findPostByIdController = async (req: Request, res: Response) => {
             Post: post,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exibição da postagem.');
+        handleErrorResponse(res, error, 'exibição da postagem');
     }
 };
 
 export const createPostController = async (req: Request, res: Response) => {
     try {
         const postData = req.body as PostInterface;
-
-        validatePostData(postData);
 
         const createdPost = await createPostService(postData);
 
@@ -66,16 +63,14 @@ export const updatePostController = async (req: Request, res: Response) => {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
 
-        validatePostData(postData);
-
         const updatedPost = await updatePostService(postId, postData);
 
         res.status(200).json({
             message: 'Dados atualizados com sucesso.',
-            User: updatedPost,
+            Post: updatedPost,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados da postagem.');
+        handleErrorResponse(res, error, 'atualização dos dados da postagem');
     }
 };
 
@@ -90,9 +85,9 @@ export const deletePostController = async (req: Request, res: Response) => {
         await deletePostService(postId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso!',
+            message: 'Exclusão feita com sucesso.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão da postagem.');
+        handleErrorResponse(res, error, 'exclusão da postagem');
     }
 };

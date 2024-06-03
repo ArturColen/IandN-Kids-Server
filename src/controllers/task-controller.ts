@@ -7,7 +7,6 @@ import {
     findTaskByIdService,
     updateTaskService,
 } from '../services/task/task-service';
-import { validateTaskData } from '../services/task/taskValidations-service';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllTasksController = async (req: Request, res: Response) => {
@@ -36,15 +35,13 @@ export const findTaskByIdController = async (req: Request, res: Response) => {
             Task: task,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exibição da tarefa.');
+        handleErrorResponse(res, error, 'exibição da tarefa');
     }
 };
 
 export const createTaskController = async (req: Request, res: Response) => {
     try {
         const taskData = req.body as TaskInterface;
-
-        validateTaskData(taskData);
 
         const createdTask = await createTaskService(taskData);
 
@@ -66,16 +63,14 @@ export const updateTaskController = async (req: Request, res: Response) => {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
 
-        validateTaskData(taskData);
-
         const updatedTask = await updateTaskService(taskId, taskData);
 
         res.status(200).json({
             message: 'Dados atualizados com sucesso.',
-            User: updatedTask,
+            Task: updatedTask,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados da tarefa.');
+        handleErrorResponse(res, error, 'atualização dos dados da tarefa');
     }
 };
 
@@ -90,9 +85,9 @@ export const deleteTaskController = async (req: Request, res: Response) => {
         await deleteTaskService(taskId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso!',
+            message: 'Exclusão feita com sucesso.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão da tarefa.');
+        handleErrorResponse(res, error, 'exclusão da tarefa');
     }
 };

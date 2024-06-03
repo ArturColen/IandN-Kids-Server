@@ -7,7 +7,6 @@ import {
     findUserByIdService,
     updateUserService,
 } from '../services/user/user-service';
-import { validateUserData } from '../services/user/userValidations-service';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllUsersController = async (req: Request, res: Response) => {
@@ -44,12 +43,10 @@ export const createUserController = async (req: Request, res: Response) => {
     try {
         const userData = req.body as UserInterface;
 
-        validateUserData(userData);
-
         const createdUser = await createUserService(userData);
 
         res.status(201).json({
-            message: 'Usuário criado com sucesso',
+            message: 'Usuário criado com sucesso.',
             User: createdUser,
         });
     } catch (error) {
@@ -66,8 +63,6 @@ export const updateUserController = async (req: Request, res: Response) => {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
 
-        validateUserData(userData);
-
         const updatedUser = await updateUserService(userId, userData);
 
         res.status(200).json({
@@ -75,7 +70,7 @@ export const updateUserController = async (req: Request, res: Response) => {
             User: updatedUser,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados do usuário.');
+        handleErrorResponse(res, error, 'atualização dos dados do usuário');
     }
 };
 
@@ -90,7 +85,7 @@ export const deleteUserController = async (req: Request, res: Response) => {
         await deleteUserService(userId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso!',
+            message: 'Exclusão feita com sucesso.',
         });
     } catch (error) {
         handleErrorResponse(res, error, 'exclusão do usuário');

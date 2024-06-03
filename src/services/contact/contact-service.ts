@@ -69,7 +69,7 @@ export const updateContactService = async (
         return updatedContact;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao atualizar o contato.');
+        throw new Error('Erro ao atualizar dados do contato.');
     }
 };
 

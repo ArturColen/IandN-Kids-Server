@@ -7,7 +7,6 @@ import {
     findContactByIdService,
     updateContactService,
 } from '../services/contact/contact-service';
-import { validateContactData } from '../services/contact/contactValidations-service';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllContactsController = async (
@@ -50,8 +49,6 @@ export const createContactController = async (req: Request, res: Response) => {
     try {
         const contactData = req.body as ContactInterface;
 
-        validateContactData(contactData);
-
         const createdContact = await createContactService(contactData);
 
         res.status(201).json({
@@ -72,8 +69,6 @@ export const updateContactController = async (req: Request, res: Response) => {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
 
-        validateContactData(contactData);
-
         const updatedContact = await updateContactService(
             contactId,
             contactData
@@ -84,7 +79,7 @@ export const updateContactController = async (req: Request, res: Response) => {
             Contact: updatedContact,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados do contato.');
+        handleErrorResponse(res, error, 'atualização dos dados do contato');
     }
 };
 
@@ -99,9 +94,9 @@ export const deleteContactController = async (req: Request, res: Response) => {
         await deleteContactService(contactId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso!',
+            message: 'Exclusão feita com sucesso.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão do contato.');
+        handleErrorResponse(res, error, 'exclusão do contato');
     }
 };
