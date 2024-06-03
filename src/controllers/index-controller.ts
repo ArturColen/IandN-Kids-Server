@@ -1,9 +1,7 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Request, Response } from 'express';
+import { handleErrorResponse } from '../middlewares/response-middleware';
 
-export const indexController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const indexController = async (req: Request, res: Response) => {
     try {
         const projectTitle = 'I&N Kids';
         const projectDescription =
@@ -11,15 +9,13 @@ export const indexController = async (
         const developer = 'Artur Bomtempo';
         const version = '1.0.0';
 
-        reply.status(200).send({
+        res.status(200).json({
             projectTitle: projectTitle,
             projectDescription: projectDescription,
             developer: developer,
             version: version,
         });
     } catch (error) {
-        reply.status(500).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };

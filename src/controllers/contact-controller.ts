@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Request, Response } from 'express';
 import { ContactInterface } from '../interfaces/contact-interface';
 import {
     createContactService,
@@ -7,32 +7,30 @@ import {
     findContactByIdService,
     updateContactService,
 } from '../services/contact/contact-service';
-import { contactParamsSchema } from '../utils/parameterValidation';
 import { validateContactData } from '../services/contact/contactValidations-service';
+import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllContactsController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
+    req: Request,
+    res: Response
 ) => {
     try {
         const contacts = await findAllContactsService();
 
-        reply.status(200).send({
+        res.status(200).json({
             Contacts: contacts,
         });
     } catch (error) {
-        reply.status(404).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
 export const findContactByIdController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
+    req: Request,
+    res: Response
 ) => {
     try {
-        const { contactId } = contactParamsSchema.parse(req.params);
+        const contactId = req.query.id as string;
 
         if (!contactId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -40,30 +38,15 @@ export const findContactByIdController = async (
 
         const contact = await findContactByIdService(contactId);
 
-        reply.status(200).send({
+        res.status(200).json({
             Contact: contact,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para exibição do contato.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exibição do contato');
     }
 };
 
-export const createContactController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const createContactController = async (req: Request, res: Response) => {
     try {
         const contactData = req.body as ContactInterface;
 
@@ -71,23 +54,18 @@ export const createContactController = async (
 
         const createdContact = await createContactService(contactData);
 
-        reply.status(201).send({
+        res.status(201).json({
             message: 'Contato criado com sucesso.',
-            Contato: createdContact,
+            Contact: createdContact,
         });
     } catch (error) {
-        reply.status(500).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const updateUserController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const updateContactController = async (req: Request, res: Response) => {
     try {
-        const { contactId } = contactParamsSchema.parse(req.params);
+        const contactId = req.params.id as string;
         const contactData = req.body as ContactInterface;
 
         if (!contactId) {
@@ -101,33 +79,18 @@ export const updateUserController = async (
             contactData
         );
 
-        reply.status(200).send({
+        res.status(200).json({
             message: 'Dados atualizados com sucesso.',
             Contact: updatedContact,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para atualização do contato.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'atualização dos dados do contato.');
     }
 };
 
-export const deleteContactController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const deleteContactController = async (req: Request, res: Response) => {
     try {
-        const { contactId } = contactParamsSchema.parse(req.params);
+        const contactId = req.params.id as string;
 
         if (!contactId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
@@ -135,22 +98,10 @@ export const deleteContactController = async (
 
         await deleteContactService(contactId);
 
-        reply.status(200).send({
-            message: 'Exclusão feita com sucesso.',
+        res.status(200).json({
+            message: 'Exclusão feita com sucesso!',
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para exclusão do contato.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exclusão do contato.');
     }
 };

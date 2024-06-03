@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Request, Response } from 'express';
 import { UserInterface } from '../interfaces/user-interface';
 import {
     createUserService,
@@ -8,31 +8,23 @@ import {
     updateUserService,
 } from '../services/user/user-service';
 import { validateUserData } from '../services/user/userValidations-service';
-import { userParamsSchema } from '../utils/parameterValidation';
+import { handleErrorResponse } from '../middlewares/response-middleware';
 
-export const findAllUsersController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const findAllUsersController = async (req: Request, res: Response) => {
     try {
         const users = await findAllUsersService();
 
-        reply.status(200).send({
+        res.status(200).json({
             Users: users,
         });
     } catch (error) {
-        reply.status(404).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const findUserByIdController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const findUserByIdController = async (req: Request, res: Response) => {
     try {
-        const { userId } = userParamsSchema.parse(req.params);
+        const userId = req.query.id as string;
 
         if (!userId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -40,30 +32,15 @@ export const findUserByIdController = async (
 
         const user = await findUserByIdService(userId);
 
-        reply.status(200).send({
+        res.status(200).json({
             User: user,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para exibição do usuário.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exibição do usuário');
     }
 };
 
-export const createUserController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const createUserController = async (req: Request, res: Response) => {
     try {
         const userData = req.body as UserInterface;
 
@@ -71,23 +48,18 @@ export const createUserController = async (
 
         const createdUser = await createUserService(userData);
 
-        reply.status(201).send({
-            message: 'Usuário criado com sucesso.',
+        res.status(201).json({
+            message: 'Usuário criado com sucesso',
             User: createdUser,
         });
     } catch (error) {
-        reply.status(500).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const updateUserController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const updateUserController = async (req: Request, res: Response) => {
     try {
-        const { userId } = userParamsSchema.parse(req.params);
+        const userId = req.params.id as string;
         const userData = req.body as UserInterface;
 
         if (!userId) {
@@ -98,33 +70,18 @@ export const updateUserController = async (
 
         const updatedUser = await updateUserService(userId, userData);
 
-        reply.status(200).send({
+        res.status(200).json({
             message: 'Dados atualizados com sucesso.',
             User: updatedUser,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para atualização do usuário.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'atualização dos dados do usuário.');
     }
 };
 
-export const deleteUserController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const deleteUserController = async (req: Request, res: Response) => {
     try {
-        const { userId } = userParamsSchema.parse(req.params);
+        const userId = req.params.id as string;
 
         if (!userId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
@@ -132,22 +89,10 @@ export const deleteUserController = async (
 
         await deleteUserService(userId);
 
-        reply.status(200).send({
-            message: 'Exclusão feita com sucesso.',
+        res.status(200).json({
+            message: 'Exclusão feita com sucesso!',
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para exclusão do usuário.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exclusão do usuário');
     }
 };

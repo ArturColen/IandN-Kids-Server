@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Request, Response } from 'express';
 import { PostInterface } from '../interfaces/post-interface';
 import {
     createPostService,
@@ -7,32 +7,24 @@ import {
     findPostByIdService,
     updatePostService,
 } from '../services/post/post-service';
-import { postParamsSchema } from '../utils/parameterValidation';
 import { validatePostData } from '../services/post/postValidations-service';
+import { handleErrorResponse } from '../middlewares/response-middleware';
 
-export const findAllPostsController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const findAllPostsController = async (req: Request, res: Response) => {
     try {
         const posts = await findAllPostsService();
 
-        reply.status(200).send({
+        res.status(200).json({
             Posts: posts,
         });
     } catch (error) {
-        reply.status(404).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const findPostByIdController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const findPostByIdController = async (req: Request, res: Response) => {
     try {
-        const { postId } = postParamsSchema.parse(req.params);
+        const postId = req.query.id as string;
 
         if (!postId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -40,30 +32,15 @@ export const findPostByIdController = async (
 
         const post = await findPostByIdService(postId);
 
-        reply.status(200).send({
+        res.status(200).json({
             Post: post,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para exibição da postagem.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exibição da postagem.');
     }
 };
 
-export const createPostController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const createPostController = async (req: Request, res: Response) => {
     try {
         const postData = req.body as PostInterface;
 
@@ -71,23 +48,18 @@ export const createPostController = async (
 
         const createdPost = await createPostService(postData);
 
-        reply.status(201).send({
+        res.status(201).json({
             message: 'Postagem criada com sucesso.',
             Post: createdPost,
         });
     } catch (error) {
-        reply.status(500).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const updatePostController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const updatePostController = async (req: Request, res: Response) => {
     try {
-        const { postId } = postParamsSchema.parse(req.params);
+        const postId = req.params.id as string;
         const postData = req.body as PostInterface;
 
         if (!postId) {
@@ -98,33 +70,18 @@ export const updatePostController = async (
 
         const updatedPost = await updatePostService(postId, postData);
 
-        reply.status(200).send({
+        res.status(200).json({
             message: 'Dados atualizados com sucesso.',
-            Post: updatedPost,
+            User: updatedPost,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para atualização da postagem.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'atualização dos dados da postagem.');
     }
 };
 
-export const deletePostController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const deletePostController = async (req: Request, res: Response) => {
     try {
-        const { postId } = postParamsSchema.parse(req.params);
+        const postId = req.params.id as string;
 
         if (!postId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
@@ -132,22 +89,10 @@ export const deletePostController = async (
 
         await deletePostService(postId);
 
-        reply.status(200).send({
-            message: 'Exclusão feita com sucesso.',
+        res.status(200).json({
+            message: 'Exclusão feita com sucesso!',
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para exclusão da postagem.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exclusão da postagem.');
     }
 };

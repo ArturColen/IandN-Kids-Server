@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Request, Response } from 'express';
 import { TaskInterface } from '../interfaces/task-interface';
 import {
     createTaskService,
@@ -7,32 +7,24 @@ import {
     findTaskByIdService,
     updateTaskService,
 } from '../services/task/task-service';
-import { taskParamsSchema } from '../utils/parameterValidation';
 import { validateTaskData } from '../services/task/taskValidations-service';
+import { handleErrorResponse } from '../middlewares/response-middleware';
 
-export const findAllTasksController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const findAllTasksController = async (req: Request, res: Response) => {
     try {
         const tasks = await findAllTasksService();
 
-        reply.status(200).send({
+        res.status(200).json({
             Tasks: tasks,
         });
     } catch (error) {
-        reply.status(404).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const findTaskByIdController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const findTaskByIdController = async (req: Request, res: Response) => {
     try {
-        const { taskId } = taskParamsSchema.parse(req.params);
+        const taskId = req.query.id as string;
 
         if (!taskId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -40,29 +32,15 @@ export const findTaskByIdController = async (
 
         const task = await findTaskByIdService(taskId);
 
-        reply.status(200).send({
+        res.status(200).json({
             Task: task,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message: 'O ID fornecido não é válido para exibição da tarefa.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exibição da tarefa.');
     }
 };
 
-export const createTaskController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const createTaskController = async (req: Request, res: Response) => {
     try {
         const taskData = req.body as TaskInterface;
 
@@ -70,23 +48,18 @@ export const createTaskController = async (
 
         const createdTask = await createTaskService(taskData);
 
-        reply.status(201).send({
+        res.status(201).json({
             message: 'Tarefa criada com sucesso.',
             Task: createdTask,
         });
     } catch (error) {
-        reply.status(500).send({
-            message: (error as Error).message,
-        });
+        handleErrorResponse(res, error);
     }
 };
 
-export const updateTaskController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const updateTaskController = async (req: Request, res: Response) => {
     try {
-        const { taskId } = taskParamsSchema.parse(req.params);
+        const taskId = req.params.id as string;
         const taskData = req.body as TaskInterface;
 
         if (!taskId) {
@@ -97,33 +70,18 @@ export const updateTaskController = async (
 
         const updatedTask = await updateTaskService(taskId, taskData);
 
-        reply.status(200).send({
+        res.status(200).json({
             message: 'Dados atualizados com sucesso.',
-            Task: updatedTask,
+            User: updatedTask,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message:
-                    'O ID fornecido não é válido para atualização da tarefa.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'atualização dos dados da tarefa.');
     }
 };
 
-export const deleteTaskController = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const deleteTaskController = async (req: Request, res: Response) => {
     try {
-        const { taskId } = taskParamsSchema.parse(req.params);
+        const taskId = req.params.id as string;
 
         if (!taskId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
@@ -131,21 +89,10 @@ export const deleteTaskController = async (
 
         await deleteTaskService(taskId);
 
-        reply.status(200).send({
-            message: 'Exclusão feita com sucesso.',
+        res.status(200).json({
+            message: 'Exclusão feita com sucesso!',
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes('Falha na conversão para ObjectId.')
-        ) {
-            reply.status(400).send({
-                message: 'O ID fornecido não é válido para exclusão da tarefa.',
-            });
-        } else {
-            reply.status(500).send({
-                message: (error as Error).message,
-            });
-        }
+        handleErrorResponse(res, error, 'exclusão da tarefa.');
     }
 };
