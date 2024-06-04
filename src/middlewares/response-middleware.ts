@@ -10,7 +10,7 @@ export const handleErrorResponse = (
     const status = message.includes('Cast to ObjectId failed') ? 400 : 500;
 
     const errorMessage = context
-        ? `The provided ID is not valid for  ${context}.`
+        ? `The provided ID is not valid for ${context}.`
         : message;
 
     res.status(status).json({
