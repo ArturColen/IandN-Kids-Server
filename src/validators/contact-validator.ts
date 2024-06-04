@@ -3,13 +3,11 @@ import { z } from 'zod';
 export const contactSchema = z.object({
     username: z
         .string()
-        .min(10, 'O nome do usuário deve ter pelo menos 10 caracteres.'),
-    email: z
-        .string()
-        .email('O endereço de e-mail deve estar em um formato válido.'),
+        .min(10, 'Username must be at least 10 characters long.'),
+    email: z.string().email('Email address must be in a valid format.'),
     message: z
         .string()
-        .min(50, 'A mensagem do usuário deve ter pelo menos 50 caracteres.'),
+        .min(50, 'User message must be at least 50 characters long.'),
 });
 
 export const validateContactData = (contactData: any) => {

@@ -5,13 +5,12 @@ export const handleErrorResponse = (
     error: unknown,
     context?: string
 ) => {
-    const message =
-        error instanceof Error ? error.message : 'Erro desconhecido.';
+    const message = error instanceof Error ? error.message : 'Unknown error.';
 
     const status = message.includes('Cast to ObjectId failed') ? 400 : 500;
 
     const errorMessage = context
-        ? `O ID fornecido não é válido para ${context}.`
+        ? `The provided ID is not valid for  ${context}.`
         : message;
 
     res.status(status).json({

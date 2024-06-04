@@ -27,7 +27,9 @@ export const findTaskByIdController = async (req: Request, res: Response) => {
         const taskId = req.params.id as string;
 
         if (!taskId) {
-            throw new Error('O ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         const task = await findTaskByIdService(taskId);
@@ -36,7 +38,7 @@ export const findTaskByIdController = async (req: Request, res: Response) => {
             Task: task,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exibição da tarefa');
+        handleErrorResponse(res, error, 'displaying the task');
     }
 };
 
@@ -49,7 +51,7 @@ export const createTaskController = async (req: Request, res: Response) => {
         const createdTask = await createTaskService(taskData);
 
         res.status(201).json({
-            message: 'Tarefa criada com sucesso.',
+            message: 'Task created successfully.',
             Task: createdTask,
         });
     } catch (error) {
@@ -63,7 +65,9 @@ export const updateTaskController = async (req: Request, res: Response) => {
         const taskData = req.body as TaskInterface;
 
         if (!taskId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         validateTaskData(taskData);
@@ -71,11 +75,11 @@ export const updateTaskController = async (req: Request, res: Response) => {
         const updatedTask = await updateTaskService(taskId, taskData);
 
         res.status(200).json({
-            message: 'Dados atualizados com sucesso.',
+            message: 'Data updated successfully.',
             Task: updatedTask,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados da tarefa');
+        handleErrorResponse(res, error, 'updating task data');
     }
 };
 
@@ -84,15 +88,17 @@ export const deleteTaskController = async (req: Request, res: Response) => {
         const taskId = req.params.id as string;
 
         if (!taskId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         await deleteTaskService(taskId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso.',
+            message: 'Deletion completed successfully.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão da tarefa');
+        handleErrorResponse(res, error, 'deleting the task');
     }
 };

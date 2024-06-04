@@ -8,7 +8,7 @@ export const errorMiddleware = (
 ) => {
     if (err instanceof SyntaxError && 'body' in err) {
         res.status(400).json({
-            error: 'Erro de análise JSON. Verifique o formato do seu JSON.',
+            error: 'JSON parsing error. Please check the format of your JSON.',
         });
     } else {
         next();

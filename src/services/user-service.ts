@@ -13,26 +13,26 @@ export const findAllUsersService = async () => {
         return users;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao buscar todos os usuários.');
+        throw new Error('Error retrieving all users.');
     }
 };
 
 export const findUserByIdService = async (userId: string) => {
     try {
         if (!userId) {
-            throw new Error('ID do usuário não informado.');
+            throw new Error('User ID not provided.');
         }
 
         const user = await findUserByIdRepository(userId);
 
         if (!user) {
-            throw new Error('Usuário não encontrado.');
+            throw new Error('User not found.');
         }
 
         return user;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao buscar usuário por ID.');
+        throw new Error('Error retrieving user by ID.');
     }
 };
 
@@ -43,7 +43,7 @@ export const createUserService = async (userData: UserInterface) => {
         return createdUser;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao criar usuário.');
+        throw new Error('Error creating user.');
     }
 };
 
@@ -55,13 +55,13 @@ export const updateUserService = async (
         const updatedUser = await updateUserRepository(userId, userData);
 
         if (!updatedUser) {
-            throw new Error('Usuário não encontrado.');
+            throw new Error('User not found.');
         }
 
         return updatedUser;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao atualizar os dados do usuário.');
+        throw new Error('Error updating user data.');
     }
 };
 
@@ -70,12 +70,12 @@ export const deleteUserService = async (userId: string) => {
         const deletedUser = await deleteUserRepository(userId);
 
         if (!deletedUser) {
-            throw new Error('Usuário não encontrado.');
+            throw new Error('User not found.');
         }
 
         return deletedUser;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao excluir usuário.');
+        throw new Error('Error deleting user.');
     }
 };

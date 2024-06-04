@@ -13,26 +13,26 @@ export const findAllContactsService = async () => {
         return contacts;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao buscar todos os contatos.');
+        throw new Error('Error retrieving all contacts.');
     }
 };
 
 export const findContactByIdService = async (contactId: string) => {
     try {
         if (!contactId) {
-            throw new Error('ID do contato não informado.');
+            throw new Error('The contact ID was not provided.');
         }
 
         const contact = await findContactByIdRepository(contactId);
 
         if (!contact) {
-            throw new Error('Contato não encontrado.');
+            throw new Error('Contact not found.');
         }
 
         return contact;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao buscar contato por ID.');
+        throw new Error('Error retrieving contact by ID.');
     }
 };
 
@@ -43,7 +43,7 @@ export const createContactService = async (contactData: ContactInterface) => {
         return createdContact;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao criar contato.');
+        throw new Error('Error creating contact.');
     }
 };
 
@@ -58,13 +58,13 @@ export const updateContactService = async (
         );
 
         if (!updatedContact) {
-            throw new Error('Contato não encontrado.');
+            throw new Error('Contact not found.');
         }
 
         return updatedContact;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao atualizar dados do contato.');
+        throw new Error('Error updating contact data.');
     }
 };
 
@@ -73,12 +73,12 @@ export const deleteContactService = async (contactId: string) => {
         const deletedContact = await deleteContactRepository(contactId);
 
         if (!deletedContact) {
-            throw new Error('Contato não encontrado.');
+            throw new Error('Contact not found.');
         }
 
         return deletedContact;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao excluir contato.');
+        throw new Error('Error deleting contact.');
     }
 };

@@ -33,7 +33,9 @@ export const findContactByIdController = async (
         const contactId = req.params.id as string;
 
         if (!contactId) {
-            throw new Error('O ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         const contact = await findContactByIdService(contactId);
@@ -42,7 +44,7 @@ export const findContactByIdController = async (
             Contact: contact,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exibição do contato');
+        handleErrorResponse(res, error, 'displaying the contact');
     }
 };
 
@@ -55,7 +57,7 @@ export const createContactController = async (req: Request, res: Response) => {
         const createdContact = await createContactService(contactData);
 
         res.status(201).json({
-            message: 'Contato criado com sucesso.',
+            message: 'Contact created successfully.',
             Contact: createdContact,
         });
     } catch (error) {
@@ -69,7 +71,9 @@ export const updateContactController = async (req: Request, res: Response) => {
         const contactData = req.body as ContactInterface;
 
         if (!contactId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         validateContactData(contactData);
@@ -80,11 +84,11 @@ export const updateContactController = async (req: Request, res: Response) => {
         );
 
         res.status(200).json({
-            message: 'Dados atualizados com sucesso.',
+            message: 'Data updated successfully.',
             Contact: updatedContact,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados do contato');
+        handleErrorResponse(res, error, 'updating contact data');
     }
 };
 
@@ -93,15 +97,17 @@ export const deleteContactController = async (req: Request, res: Response) => {
         const contactId = req.params.id as string;
 
         if (!contactId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         await deleteContactService(contactId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso.',
+            message: 'Deletion completed successfully.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão do contato');
+        handleErrorResponse(res, error, 'deleting the contact');
     }
 };

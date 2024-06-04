@@ -27,7 +27,9 @@ export const findPostByIdController = async (req: Request, res: Response) => {
         const postId = req.params.id as string;
 
         if (!postId) {
-            throw new Error('O ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         const post = await findPostByIdService(postId);
@@ -36,7 +38,7 @@ export const findPostByIdController = async (req: Request, res: Response) => {
             Post: post,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exibição da postagem');
+        handleErrorResponse(res, error, 'displaying the post');
     }
 };
 
@@ -49,7 +51,7 @@ export const createPostController = async (req: Request, res: Response) => {
         const createdPost = await createPostService(postData);
 
         res.status(201).json({
-            message: 'Postagem criada com sucesso.',
+            message: 'Post created successfully.',
             Post: createdPost,
         });
     } catch (error) {
@@ -63,7 +65,9 @@ export const updatePostController = async (req: Request, res: Response) => {
         const postData = req.body as PostInterface;
 
         if (!postId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         validatePostData(postData);
@@ -71,11 +75,11 @@ export const updatePostController = async (req: Request, res: Response) => {
         const updatedPost = await updatePostService(postId, postData);
 
         res.status(200).json({
-            message: 'Dados atualizados com sucesso.',
+            message: 'Data updated successfully.',
             Post: updatedPost,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados da postagem');
+        handleErrorResponse(res, error, 'updating post data');
     }
 };
 
@@ -84,15 +88,17 @@ export const deletePostController = async (req: Request, res: Response) => {
         const postId = req.params.id as string;
 
         if (!postId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         await deletePostService(postId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso.',
+            message: 'Deletion completed successfully.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão da postagem');
+        handleErrorResponse(res, error, 'deleting the post');
     }
 };

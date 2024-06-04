@@ -13,26 +13,26 @@ export const findAllPostsService = async () => {
         return posts;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao buscar todas as postagens.');
+        throw new Error('Error retrieving all posts.');
     }
 };
 
 export const findPostByIdService = async (postId: string) => {
     try {
         if (!postId) {
-            throw new Error('ID da postagem não informado.');
+            throw new Error('The post ID was not provided.');
         }
 
         const post = await findPostByIdRepository(postId);
 
         if (!post) {
-            throw new Error('Postagem não encontrada.');
+            throw new Error('Post not found.');
         }
 
         return post;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao buscar postagem por ID.');
+        throw new Error('Error retrieving post by ID.');
     }
 };
 
@@ -43,7 +43,7 @@ export const createPostService = async (postData: PostInterface) => {
         return createdPost;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao criar postagem.');
+        throw new Error('Error creating post.');
     }
 };
 
@@ -55,13 +55,13 @@ export const updatePostService = async (
         const updatedPost = await updatePostRepository(postId, postData);
 
         if (!updatedPost) {
-            throw new Error('Postagem não encontrada.');
+            throw new Error('Post not found.');
         }
 
         return updatedPost;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao atualizar dados da postagem.');
+        throw new Error('Error updating post data.');
     }
 };
 
@@ -70,12 +70,12 @@ export const deletePostService = async (postId: string) => {
         const deletedPost = await deletePostRepository(postId);
 
         if (!deletedPost) {
-            throw new Error('Postagem não encontrada.');
+            throw new Error('Post not found.');
         }
 
         return deletedPost;
     } catch (error) {
         console.error(error);
-        throw new Error('Erro ao excluir postagem.');
+        throw new Error('Error deleting post.');
     }
 };

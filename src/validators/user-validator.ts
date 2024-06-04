@@ -3,19 +3,17 @@ import { z } from 'zod';
 export const userSchema = z.object({
     name: z
         .string()
-        .min(10, 'O nome do usuário deve ter pelo menos 10 caracteres.'),
+        .min(10, 'The user name must be at least 10 characters long.'),
     phone: z
         .string()
         .regex(
             /^\(\d{2}\) \d{5}-\d{4}$/,
-            'O número de telefone deve estar no formato (xx) xxxxx-xxxx.'
+            'The phone number must be in the format (xx) xxxxx-xxxx.'
         ),
-    email: z
-        .string()
-        .email('O endereço de e-mail deve estar em um formato válido.'),
+    email: z.string().email('The email address must be in a valid format.'),
     password: z
         .string()
-        .min(8, 'A senha do usuário deve ter pelo menos 8 caracteres.'),
+        .min(8, 'The user password must be at least 8 characters long.'),
 });
 
 export const validateUserData = (userData: any) => {

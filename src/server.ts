@@ -23,7 +23,7 @@ app.use('/contacts', contactRouter);
 
 app.use((req: Request, res: Response) => {
     res.status(404).json({
-        message: 'Rota não encontrada.',
+        message: 'Route not found.',
     });
 });
 

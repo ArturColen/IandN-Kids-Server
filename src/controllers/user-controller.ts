@@ -27,7 +27,9 @@ export const findUserByIdController = async (req: Request, res: Response) => {
         const userId = req.params.id as string;
 
         if (!userId) {
-            throw new Error('O ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         const user = await findUserByIdService(userId);
@@ -36,7 +38,7 @@ export const findUserByIdController = async (req: Request, res: Response) => {
             User: user,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exibição do usuário');
+        handleErrorResponse(res, error, 'user display');
     }
 };
 
@@ -49,7 +51,7 @@ export const createUserController = async (req: Request, res: Response) => {
         const createdUser = await createUserService(userData);
 
         res.status(201).json({
-            message: 'Usuário criado com sucesso.',
+            message: 'User created successfully.',
             User: createdUser,
         });
     } catch (error) {
@@ -63,7 +65,9 @@ export const updateUserController = async (req: Request, res: Response) => {
         const userData = req.body as UserInterface;
 
         if (!userId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         validateUserData(userData);
@@ -71,11 +75,11 @@ export const updateUserController = async (req: Request, res: Response) => {
         const updatedUser = await updateUserService(userId, userData);
 
         res.status(200).json({
-            message: 'Dados atualizados com sucesso.',
+            message: 'Data updated successfully.',
             User: updatedUser,
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'atualização dos dados do usuário');
+        handleErrorResponse(res, error, 'user data update');
     }
 };
 
@@ -84,15 +88,17 @@ export const deleteUserController = async (req: Request, res: Response) => {
         const userId = req.params.id as string;
 
         if (!userId) {
-            throw new Error('O parâmetro ID não foi fornecido na consulta.');
+            throw new Error(
+                'The ID was not provided as a parameter for the query.'
+            );
         }
 
         await deleteUserService(userId);
 
         res.status(200).json({
-            message: 'Exclusão feita com sucesso.',
+            message: 'Deletion completed successfully.',
         });
     } catch (error) {
-        handleErrorResponse(res, error, 'exclusão do usuário');
+        handleErrorResponse(res, error, 'user deletion');
     }
 };
