@@ -11,7 +11,7 @@ const postRouter = express.Router();
 
 postRouter.get('/', findAllPostsController);
 
-postRouter.get('/search', findPostByIdController);
+postRouter.get('/search/:id', findPostByIdController);
 
 postRouter.post('/', createPostController);
 

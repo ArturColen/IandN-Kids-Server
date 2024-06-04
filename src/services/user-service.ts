@@ -1,12 +1,11 @@
-import { UserInterface } from '../../interfaces/user-interface';
+import { UserInterface } from '../interfaces/user-interface';
 import {
     createUserRepository,
     deleteUserRepository,
     findAllUsersRepository,
     findUserByIdRepository,
     updateUserRepository,
-} from '../../repositories/user-repository';
-import { validateUserData } from './userValidations-service';
+} from '../repositories/user-repository';
 
 export const findAllUsersService = async () => {
     try {
@@ -39,8 +38,6 @@ export const findUserByIdService = async (userId: string) => {
 
 export const createUserService = async (userData: UserInterface) => {
     try {
-        validateUserData(userData);
-
         const createdUser = await createUserRepository(userData);
 
         return createdUser;
@@ -55,8 +52,6 @@ export const updateUserService = async (
     userData: Partial<UserInterface>
 ) => {
     try {
-        validateUserData(userData);
-
         const updatedUser = await updateUserRepository(userId, userData);
 
         if (!updatedUser) {

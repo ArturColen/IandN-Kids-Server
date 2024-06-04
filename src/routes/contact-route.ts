@@ -11,7 +11,7 @@ const contactRouter = express.Router();
 
 contactRouter.get('/', findAllContactsController);
 
-contactRouter.get('/search', findContactByIdController);
+contactRouter.get('/search/:id', findContactByIdController);
 
 contactRouter.post('/', createContactController);
 

@@ -11,7 +11,7 @@ const taskRouter = express.Router();
 
 taskRouter.get('/', findAllTasksController);
 
-taskRouter.get('/search', findTaskByIdController);
+taskRouter.get('/search/:id', findTaskByIdController);
 
 taskRouter.post('/', createTaskController);
 

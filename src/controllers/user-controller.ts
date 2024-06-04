@@ -6,7 +6,8 @@ import {
     findAllUsersService,
     findUserByIdService,
     updateUserService,
-} from '../services/user/user-service';
+} from '../services/user-service';
+import { validateUserData } from '../validators/user-validator';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllUsersController = async (req: Request, res: Response) => {
@@ -23,7 +24,7 @@ export const findAllUsersController = async (req: Request, res: Response) => {
 
 export const findUserByIdController = async (req: Request, res: Response) => {
     try {
-        const userId = req.query.id as string;
+        const userId = req.params.id as string;
 
         if (!userId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -42,6 +43,8 @@ export const findUserByIdController = async (req: Request, res: Response) => {
 export const createUserController = async (req: Request, res: Response) => {
     try {
         const userData = req.body as UserInterface;
+
+        validateUserData(userData);
 
         const createdUser = await createUserService(userData);
 
@@ -62,6 +65,8 @@ export const updateUserController = async (req: Request, res: Response) => {
         if (!userId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
+
+        validateUserData(userData);
 
         const updatedUser = await updateUserService(userId, userData);
 

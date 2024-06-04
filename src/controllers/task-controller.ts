@@ -6,7 +6,8 @@ import {
     findAllTasksService,
     findTaskByIdService,
     updateTaskService,
-} from '../services/task/task-service';
+} from '../services/task-service';
+import { validateTaskData } from '../validators/task-validator';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllTasksController = async (req: Request, res: Response) => {
@@ -23,7 +24,7 @@ export const findAllTasksController = async (req: Request, res: Response) => {
 
 export const findTaskByIdController = async (req: Request, res: Response) => {
     try {
-        const taskId = req.query.id as string;
+        const taskId = req.params.id as string;
 
         if (!taskId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -42,6 +43,8 @@ export const findTaskByIdController = async (req: Request, res: Response) => {
 export const createTaskController = async (req: Request, res: Response) => {
     try {
         const taskData = req.body as TaskInterface;
+
+        validateTaskData(taskData);
 
         const createdTask = await createTaskService(taskData);
 
@@ -62,6 +65,8 @@ export const updateTaskController = async (req: Request, res: Response) => {
         if (!taskId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
+
+        validateTaskData(taskData);
 
         const updatedTask = await updateTaskService(taskId, taskData);
 

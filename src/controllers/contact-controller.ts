@@ -6,7 +6,8 @@ import {
     findAllContactsService,
     findContactByIdService,
     updateContactService,
-} from '../services/contact/contact-service';
+} from '../services/contact-service';
+import { validateContactData } from '../validators/contact-validator';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllContactsController = async (
@@ -29,7 +30,7 @@ export const findContactByIdController = async (
     res: Response
 ) => {
     try {
-        const contactId = req.query.id as string;
+        const contactId = req.params.id as string;
 
         if (!contactId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -48,6 +49,8 @@ export const findContactByIdController = async (
 export const createContactController = async (req: Request, res: Response) => {
     try {
         const contactData = req.body as ContactInterface;
+
+        validateContactData(contactData);
 
         const createdContact = await createContactService(contactData);
 
@@ -68,6 +71,8 @@ export const updateContactController = async (req: Request, res: Response) => {
         if (!contactId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
+
+        validateContactData(contactData);
 
         const updatedContact = await updateContactService(
             contactId,

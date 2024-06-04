@@ -11,7 +11,7 @@ const userRouter = express.Router();
 
 userRouter.get('/', findAllUsersController);
 
-userRouter.get('/search', findUserByIdController);
+userRouter.get('/search/:id', findUserByIdController);
 
 userRouter.post('/', createUserController);
 

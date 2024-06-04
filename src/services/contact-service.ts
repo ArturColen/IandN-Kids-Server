@@ -1,12 +1,11 @@
-import { ContactInterface } from '../../interfaces/contact-interface';
+import { ContactInterface } from '../interfaces/contact-interface';
 import {
     createContactRepository,
     deleteContactRepository,
     findAllContactsRepository,
     findContactByIdRepository,
     updateContactRepository,
-} from '../../repositories/contact-repository';
-import { validateContactData } from './contactValidations-service';
+} from '../repositories/contact-repository';
 
 export const findAllContactsService = async () => {
     try {
@@ -39,8 +38,6 @@ export const findContactByIdService = async (contactId: string) => {
 
 export const createContactService = async (contactData: ContactInterface) => {
     try {
-        validateContactData(contactData);
-
         const createdContact = await createContactRepository(contactData);
 
         return createdContact;
@@ -55,8 +52,6 @@ export const updateContactService = async (
     contactData: Partial<ContactInterface>
 ) => {
     try {
-        validateContactData(contactData);
-
         const updatedContact = await updateContactRepository(
             contactId,
             contactData

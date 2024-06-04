@@ -6,7 +6,8 @@ import {
     findAllPostsService,
     findPostByIdService,
     updatePostService,
-} from '../services/post/post-service';
+} from '../services/post-service';
+import { validatePostData } from '../validators/post-validator';
 import { handleErrorResponse } from '../middlewares/response-middleware';
 
 export const findAllPostsController = async (req: Request, res: Response) => {
@@ -23,7 +24,7 @@ export const findAllPostsController = async (req: Request, res: Response) => {
 
 export const findPostByIdController = async (req: Request, res: Response) => {
     try {
-        const postId = req.query.id as string;
+        const postId = req.params.id as string;
 
         if (!postId) {
             throw new Error('O ID não foi fornecido na consulta.');
@@ -42,6 +43,8 @@ export const findPostByIdController = async (req: Request, res: Response) => {
 export const createPostController = async (req: Request, res: Response) => {
     try {
         const postData = req.body as PostInterface;
+
+        validatePostData(postData);
 
         const createdPost = await createPostService(postData);
 
@@ -62,6 +65,8 @@ export const updatePostController = async (req: Request, res: Response) => {
         if (!postId) {
             throw new Error('O parâmetro ID não foi fornecido na consulta.');
         }
+
+        validatePostData(postData);
 
         const updatedPost = await updatePostService(postId, postData);
 

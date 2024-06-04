@@ -1,12 +1,11 @@
-import { TaskInterface } from '../../interfaces/task-interface';
+import { TaskInterface } from '../interfaces/task-interface';
 import {
     createTaskRepository,
     deleteTaskRepository,
     findAllTasksRepository,
     findTaskByIdRepository,
     updateTaskRepository,
-} from '../../repositories/task-repository';
-import { validateTaskData } from './taskValidations-service';
+} from '../repositories/task-repository';
 
 export const findAllTasksService = async () => {
     try {
@@ -39,8 +38,6 @@ export const findTaskByIdService = async (taskId: string) => {
 
 export const createTaskService = async (taskData: TaskInterface) => {
     try {
-        validateTaskData(taskData);
-
         const createdTask = await createTaskRepository(taskData);
 
         return createdTask;
@@ -55,8 +52,6 @@ export const updateTaskService = async (
     taskData: Partial<TaskInterface>
 ) => {
     try {
-        validateTaskData(taskData);
-
         const updatedTask = await updateTaskRepository(taskId, taskData);
 
         if (!updatedTask) {

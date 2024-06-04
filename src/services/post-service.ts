@@ -1,12 +1,11 @@
-import { PostInterface } from '../../interfaces/post-interface';
+import { PostInterface } from '../interfaces/post-interface';
 import {
     createPostRepository,
     deletePostRepository,
     findAllPostsRepository,
     findPostByIdRepository,
     updatePostRepository,
-} from '../../repositories/post-repositoy';
-import { validatePostData } from './postValidations-service';
+} from '../repositories/post-repositoy';
 
 export const findAllPostsService = async () => {
     try {
@@ -39,8 +38,6 @@ export const findPostByIdService = async (postId: string) => {
 
 export const createPostService = async (postData: PostInterface) => {
     try {
-        validatePostData(postData);
-
         const createdPost = await createPostRepository(postData);
 
         return createdPost;
@@ -55,8 +52,6 @@ export const updatePostService = async (
     postData: Partial<PostInterface>
 ) => {
     try {
-        validatePostData(postData);
-
         const updatedPost = await updatePostRepository(postId, postData);
 
         if (!updatedPost) {
