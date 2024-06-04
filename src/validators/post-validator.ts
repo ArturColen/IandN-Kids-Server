@@ -16,12 +16,7 @@ export const postSchema = z.object({
             100,
             'The content of the post must be at least 100 characters long.'
         ),
-    imageLink: z
-        .string()
-        .regex(
-            /\.(jpg|jpeg|png|gif|bmp|webp)$/i,
-            'The post image link must be a valid image URL.'
-        ),
+    imageLink: z.string().url('The post image link must be a valid URL.'),
 });
 
 export const validatePostData = (postData: any) => {
