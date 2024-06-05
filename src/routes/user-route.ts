@@ -6,17 +6,18 @@ import {
     findUserByIdController,
     updateUserController,
 } from '../controllers/user-controller';
+import { verifyTokenInBack } from '../middlewares/token-middleware';
 
 const userRouter = express.Router();
 
-userRouter.get('/', findAllUsersController);
+userRouter.get('/', verifyTokenInBack, findAllUsersController);
 
-userRouter.get('/search/:id', findUserByIdController);
+userRouter.get('/search/:id', verifyTokenInBack, findUserByIdController);
 
-userRouter.post('/', createUserController);
+userRouter.post('/', verifyTokenInBack, createUserController);
 
-userRouter.put('/:id', updateUserController);
+userRouter.put('/:id', verifyTokenInBack, updateUserController);
 
-userRouter.delete('/:id', deleteUserController);
+userRouter.delete('/:id', verifyTokenInBack, deleteUserController);
 
 export { userRouter };

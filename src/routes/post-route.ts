@@ -6,17 +6,18 @@ import {
     findPostByIdController,
     updatePostController,
 } from '../controllers/post-controller';
+import { verifyTokenInBack } from '../middlewares/token-middleware';
 
 const postRouter = express.Router();
 
-postRouter.get('/', findAllPostsController);
+postRouter.get('/', verifyTokenInBack, findAllPostsController);
 
-postRouter.get('/search/:id', findPostByIdController);
+postRouter.get('/search/:id', verifyTokenInBack, findPostByIdController);
 
-postRouter.post('/', createPostController);
+postRouter.post('/', verifyTokenInBack, createPostController);
 
-postRouter.put('/:id', updatePostController);
+postRouter.put('/:id', verifyTokenInBack, updatePostController);
 
-postRouter.delete('/:id', deletePostController);
+postRouter.delete('/:id', verifyTokenInBack, deletePostController);
 
 export { postRouter };

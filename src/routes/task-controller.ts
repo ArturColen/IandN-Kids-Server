@@ -6,17 +6,18 @@ import {
     findTaskByIdController,
     updateTaskController,
 } from '../controllers/task-controller';
+import { verifyTokenInBack } from '../middlewares/token-middleware';
 
 const taskRouter = express.Router();
 
-taskRouter.get('/', findAllTasksController);
+taskRouter.get('/', verifyTokenInBack, findAllTasksController);
 
-taskRouter.get('/search/:id', findTaskByIdController);
+taskRouter.get('/search/:id', verifyTokenInBack, findTaskByIdController);
 
-taskRouter.post('/', createTaskController);
+taskRouter.post('/', verifyTokenInBack, createTaskController);
 
-taskRouter.put('/:id', updateTaskController);
+taskRouter.put('/:id', verifyTokenInBack, updateTaskController);
 
-taskRouter.delete('/:id', deleteTaskController);
+taskRouter.delete('/:id', verifyTokenInBack, deleteTaskController);
 
 export { taskRouter };

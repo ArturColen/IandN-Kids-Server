@@ -6,17 +6,18 @@ import {
     findContactByIdController,
     updateContactController,
 } from '../controllers/contact-controller';
+import { verifyTokenInBack } from '../middlewares/token-middleware';
 
 const contactRouter = express.Router();
 
-contactRouter.get('/', findAllContactsController);
+contactRouter.get('/', verifyTokenInBack, findAllContactsController);
 
-contactRouter.get('/search/:id', findContactByIdController);
+contactRouter.get('/search/:id', verifyTokenInBack, findContactByIdController);
 
-contactRouter.post('/', createContactController);
+contactRouter.post('/', verifyTokenInBack, createContactController);
 
-contactRouter.put('/:id', updateContactController);
+contactRouter.put('/:id', verifyTokenInBack, updateContactController);
 
-contactRouter.delete('/:id', deleteContactController);
+contactRouter.delete('/:id', verifyTokenInBack, deleteContactController);
 
 export { contactRouter };
