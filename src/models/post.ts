@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 const PostSchema = new mongoose.Schema({
     title: {
@@ -15,6 +15,10 @@ const PostSchema = new mongoose.Schema({
     },
     imageLink: {
         type: String,
+        required: true,
+    },
+    userId: {
+        type: Types.ObjectId,
         required: true,
     },
 });

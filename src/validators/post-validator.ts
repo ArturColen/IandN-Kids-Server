@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { userIdValidator } from './userId-validator';
 
 export const postSchema = z.object({
     title: z
@@ -17,6 +18,7 @@ export const postSchema = z.object({
             'The content of the post must be at least 100 characters long.'
         ),
     imageLink: z.string().url('The post image link must be a valid URL.'),
+    userId: userIdValidator,
 });
 
 export const validatePostData = (postData: any) => {

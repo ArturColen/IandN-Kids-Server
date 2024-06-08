@@ -11,12 +11,14 @@ export const createPostRepository = ({
     author,
     content,
     imageLink,
+    userId,
 }: PostInterface) =>
     Post.create({
         title,
         author,
         content,
         imageLink,
+        userId,
     });
 
 export const updatePostRepository = async (

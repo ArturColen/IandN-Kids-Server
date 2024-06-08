@@ -6,11 +6,17 @@ export const findAllTasksRepository = () => Task.find();
 
 export const findTaskByIdRepository = (taskId: string) => Task.findById(taskId);
 
-export const createTaskRepository = ({ title, weekDay, time }: TaskInterface) =>
+export const createTaskRepository = ({
+    title,
+    weekDay,
+    time,
+    userId,
+}: TaskInterface) =>
     Task.create({
         title,
         weekDay,
         time,
+        userId,
     });
 
 export const updateTaskRepository = async (

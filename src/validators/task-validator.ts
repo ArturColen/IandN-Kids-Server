@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { userIdValidator } from './userId-validator';
 
 export const taskSchema = z.object({
     title: z
@@ -10,6 +11,7 @@ export const taskSchema = z.object({
     time: z
         .string()
         .regex(/^\d{2}:\d{2}$/, 'The time must be in the format xx:xx.'),
+    userId: userIdValidator,
 });
 
 export const validateTaskData = (taskData: any) => {
